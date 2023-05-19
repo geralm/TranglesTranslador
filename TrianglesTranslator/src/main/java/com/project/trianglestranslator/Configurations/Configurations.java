@@ -13,7 +13,7 @@ public class Configurations {
     
     private boolean jumpLines = true ;
     private  boolean verifyWordSpace = true;
-    private  final int limitInLine  = 22;
+    private  int limitInLine  = 22;
 
     private static  Configurations instance;
 
@@ -37,6 +37,11 @@ public class Configurations {
 
     public void setSCALE_fACTOR(float SCALE_fACTOR) {
         this.SCALE_fACTOR = SCALE_fACTOR;
+        calcCharsInLine(SCALE_fACTOR);
+    }
+    private void calcCharsInLine(float tammfuente){
+         limitInLine = (int)( 18 * (1.5 / tammfuente))-1;
+
     }
 
     public boolean isJumpLines() {
