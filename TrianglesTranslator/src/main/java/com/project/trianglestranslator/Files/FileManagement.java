@@ -2,42 +2,40 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Files;
+package com.project.trianglestranslator.Files;
 
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
+
+import com.project.trianglestranslator.Configurations.Configurations;
+import com.project.trianglestranslator.Key.TextCode;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.util.Matrix;
 
 /**
  *
  * @author Esteb
  */
-public class File {
+public class FileManagement {
     public static final String filePath = ".//texto.txt";
     public static final String pdfName = "decode.pdf";
-    private static File instance;
+    private static FileManagement instance;
     private PDDocument document;
     private PDPage page;
     private PDPageContentStream contentStream;
-    private File() throws IOException { 
+    private FileManagement() throws IOException {
         instance = null;
       
     }
 
     
-    public static File getInstance() throws IOException{
+    public static FileManagement getInstance() throws IOException{
         if(instance ==null){
-            instance = new File();
+            instance = new FileManagement();
         }
         return instance;
     }
@@ -53,20 +51,21 @@ public class File {
         }
         return content.toString();
     }
-    public void drawPdf(int[] pos) throws IOException{
-        contentStream.moveTo(pos[0], page.getMediaBox().getHeight() - pos[1]);
-        contentStream.lineTo(pos[2], page.getMediaBox().getHeight() - pos[3]);
+    private void drawPdf(int[] pos) throws IOException{
+        float scaleFactor = Configurations.getInstance().getSCALE_fACTOR();
+        contentStream.moveTo(pos[0] * scaleFactor, page.getMediaBox().getHeight() - pos[1] * scaleFactor);
+        contentStream.lineTo(pos[2] * scaleFactor, page.getMediaBox().getHeight() - pos[3] * scaleFactor);
         contentStream.stroke();
     }
     
-    public void convertToPdf(String name, LinkedList<int[]> positions) throws IOException{
+    public void convertToPdf(String name) throws IOException{
             page = new PDPage();
             
-            System.out.println("Rotacion "+ page.getRotation());
             document= new PDDocument();
             
             document.addPage(page);
-            contentStream = new PDPageContentStream(document, page);   
+            contentStream = new PDPageContentStream(document, page);
+            LinkedList<int[]> positions =  TextCode.getInstance().getKeysPositions();
             for(int[] pos : positions){
                 drawPdf(pos);
             }

@@ -2,22 +2,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package Key;
+package com.project.trianglestranslator.Key;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  *
  * @author Esteb
  */
-public class Code {
+public class CodeParser {
     private HashMap<String, Key> codesData;
+
     private HashMap<ECode, int[]> drawlinesData;
    
-    private static Code instance;
+    private static CodeParser instance;
     
-    private Code(){
+    private CodeParser(){
         codesData  = new HashMap<>();
         drawlinesData = new HashMap<>();
         init_codes();
@@ -25,9 +25,9 @@ public class Code {
         instance = null;
     }
     
-    public static Code getInstance(){
+    public static CodeParser getInstance(){
         if(instance==null){
-            instance = new Code();
+            instance = new CodeParser();
         }
         return instance;
     }
@@ -35,9 +35,14 @@ public class Code {
     *   
     *  @Return Key 
     */
-    public Key parseCode(String k ){
+    public Key parseCode(String k )throws NullPointerException{
         //Use this to get a Key and then get the code of the key to parse
-        return codesData.get(k);
+        if(codesData.containsKey(k)){
+            return  codesData.get(k);
+        }else{
+            throw new NullPointerException("The letter\""+k+"\"cannot be parse");
+        }
+
     }
     public int [] parseDraw(ECode value){
         //Use this to get one line to draw

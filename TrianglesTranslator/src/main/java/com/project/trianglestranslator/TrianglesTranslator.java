@@ -6,12 +6,7 @@
 package com.project.trianglestranslator;
 
 
-import Files.File;
-import GUI.MainFrame;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+import com.project.trianglestranslator.GUI.GUI;
 
 /**
  *
@@ -24,7 +19,7 @@ public class TrianglesTranslator {
        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MainFrame().setVisible(true);
+                new GUI().setVisible(true);
             }
         });
     }
