@@ -11,6 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.lang.module.Configuration;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
 import com.project.trianglestranslator.Configurations.Configurations;
 import com.project.trianglestranslator.Files.FileManagement;
@@ -20,13 +23,14 @@ import com.project.trianglestranslator.Key.TextCode;
 public class GUI extends JFrame {
     private JPanel jpanelTrianglesEncoder;
     private JTextArea textArea;
-    private JSpinner spinner1;
     private JCheckBox wordWrapCheckBox;
     private JCheckBox lineBreaks;
     private JButton buttonClose;
     private JButton buttonOpenTxt;
     private JButton buttonSavePdf;
     private JPanel mainPanel;
+    private JComboBox comboBoxSize;
+    private JScrollPane jScrollPaneTriangles;
     private JPanel trianglesText;
 
     public GUI(){
@@ -39,8 +43,9 @@ public class GUI extends JFrame {
 
     }
     private void init_components(){
-        textArea.setPreferredSize(new Dimension(750, 650));
+        setDefaultSize();
         jpanelTrianglesEncoder.setPreferredSize(new Dimension(750, 650));
+        textArea.setPreferredSize(new Dimension(750, 650));
         trianglesText = new TextPane(jpanelTrianglesEncoder);
         jpanelTrianglesEncoder.setLayout(new BorderLayout());
         jpanelTrianglesEncoder.add(trianglesText, BorderLayout.CENTER);
@@ -91,12 +96,15 @@ public class GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Configurations.getInstance().setJumpLines(lineBreaks.isSelected());
+                System.out.println("Line breaks changed to "+ String.valueOf(lineBreaks.isSelected()));
+
             }
         });
         wordWrapCheckBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Configurations.getInstance().setVerifyWordSpace(wordWrapCheckBox.isSelected());
+                System.out.println("Word wrap changed"+ String.valueOf(wordWrapCheckBox.isSelected()));
             }
         });
 
@@ -109,17 +117,28 @@ public class GUI extends JFrame {
                 int option = fileChooser.showSaveDialog(GUI.this);
                 if (option == JFileChooser.APPROVE_OPTION) {
                     File selectedFolder = fileChooser.getSelectedFile();
-                    String folderPath = selectedFolder.getAbsolutePath();
-
+                    String folderPath = selectedFolder.getAbsolutePath()+"\\";
+                    String name = JOptionPane.showInputDialog("PDF name (do not add '.pdf')");
+                    folderPath+=name+".pdf";
                     // Llama a la función convertToPdf con la ruta de la carpeta seleccionada
                     try {
                         FileManagement.getInstance().convertToPdf(folderPath);
-                        JOptionPane.showMessageDialog(null,"PDF saved sucessfully");
+                        JOptionPane.showMessageDialog(null,"PDF saved sucessfully in \n"+folderPath);
                     } catch (IOException ex) {
                         JOptionPane.showMessageDialog(null,"Error to save pdf");
                     }
                 }
 
+            }
+        });
+        comboBoxSize.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedSize = (String) comboBoxSize.getSelectedItem();
+                float size = Float.parseFloat(selectedSize);
+                Configurations.getInstance().setSCALE_fACTOR(size);
+                TextCode.getInstance().parseText(textArea.getText());
+                jpanelTrianglesEncoder.repaint();
             }
         });
 
@@ -139,7 +158,20 @@ public class GUI extends JFrame {
         }
         return searchedFile;
     }
+    private void setDefaultSize() {
+        this.comboBoxSize.setEditable(false);
+        float size = 0.25f;
+        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
+        decimalFormatSymbols.setDecimalSeparator('.');
 
+        DecimalFormat decimalFormat = new DecimalFormat("#.##", decimalFormatSymbols);
+
+        for (int i = 0; i < 10; i++) {
+            comboBoxSize.addItem(decimalFormat.format(size));
+            size += 0.25f;
+        }
+        comboBoxSize.setSelectedIndex(3);
+    }
 
 
 

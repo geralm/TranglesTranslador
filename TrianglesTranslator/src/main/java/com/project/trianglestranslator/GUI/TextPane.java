@@ -4,12 +4,14 @@
  */
 package com.project.trianglestranslator.GUI;
 
+import com.project.trianglestranslator.Configurations.Configurations;
 import com.project.trianglestranslator.Key.TextCode;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.io.IOException;
+import java.lang.module.Configuration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
@@ -42,7 +44,8 @@ public class TextPane extends JPanel{
 
     }
     public void drawLine(int[] pos, Graphics2D g) throws IOException{
-        g.drawLine(pos[0], pos[1], pos[2], pos[3]);
+        float scaleFactor = Configurations.getInstance().getSCALE_fACTOR();
+        g.drawLine((int) (pos[0] * scaleFactor), (int) (pos[1]* scaleFactor), (int) (pos[2]* scaleFactor), (int) (pos[3]* scaleFactor));
     }
 
 }
