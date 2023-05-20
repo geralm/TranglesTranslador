@@ -9,6 +9,7 @@ public class TextCode {
     private int cursor;
     private int lettersCounter;
     private int line;
+
     private String text;
     private LinkedList<int[]> keysPositions;
     private LinkedList<Key> keys;
@@ -19,6 +20,7 @@ public class TextCode {
         this.cursor = 1;
         lettersCounter = 0 ;
         line  = 1;
+
         this.text = "";
         keysPositions = new LinkedList<>();
         keys = new LinkedList<>();

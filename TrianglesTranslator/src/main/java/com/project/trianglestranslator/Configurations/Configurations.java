@@ -14,7 +14,7 @@ public class Configurations {
     private boolean jumpLines = true ;
     private  boolean verifyWordSpace = true;
     private  int limitInLine  = 22;
-
+    private int linesXPage = 19;
     private static  Configurations instance;
 
     private Configurations() {
@@ -38,10 +38,14 @@ public class Configurations {
     public void setSCALE_fACTOR(float SCALE_fACTOR) {
         this.SCALE_fACTOR = SCALE_fACTOR;
         calcCharsInLine(SCALE_fACTOR);
+        calcLinesXPage(SCALE_fACTOR);
     }
     private void calcCharsInLine(float tammfuente){
          limitInLine = (int)( 18 * (1.5 / tammfuente))-1;
 
+    }
+    private void calcLinesXPage(float tammfuente){
+        linesXPage = (int) Math.floor(14.0 / (18.0/tammfuente))-1;
     }
 
     public boolean isJumpLines() {

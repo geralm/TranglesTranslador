@@ -53,6 +53,7 @@ public class FileManagement {
     }
     private void drawPdf(int[] pos) throws IOException{
         float scaleFactor = Configurations.getInstance().getSCALE_fACTOR();
+      
         contentStream.moveTo(pos[0] * scaleFactor, page.getMediaBox().getHeight() - pos[1] * scaleFactor);
         contentStream.lineTo(pos[2] * scaleFactor, page.getMediaBox().getHeight() - pos[3] * scaleFactor);
         contentStream.stroke();
